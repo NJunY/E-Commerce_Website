@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <style>
+    #myTable, th,td{
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+  </style>
+  <body onload="javascript:loadPro()">
+    <form action="http://localhost/ws_assignment/requester/adminRequest.php" method="post">
+      <label>Product ID</label>
+      <input type="number" name="pid" placeholder="1"><br><br>
+      <label>Product Name</label>
+      <input type="varchar" name="p_name" placeholder="Best Keyboard"><br><br>
+      <label>Product Price</label>
+      <input type="decimal" name="p_price" placeholder="100.99"><br><br>
+      <label>Product Quantity</label>
+      <input type="number" name="p_quantity" placeholder="100"><br><br>
+      <label>Product Description</label>
+      <input type="varchar" name="p_desc" placeholder="The best keboard"><br><br>
+      <input type="submit" name="addProduct" value="Add Product">
+      <input type="submit" name="deleteProduct" value="Delete Product">
+      <input type="submit" name="editProduct" value="Edit Product"><br><br>
+    </form>
+    <div id="search">
+      <input type="text" id="myInput" onkeyup="searchFunc()" placeholder="Search for names..." title="Type in a name">
+    </div>
+    <div id="product">
+    </div>
+  </body>
+  <script>
+    function loadPro(){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+          document.getElementById("product").innerHTML = this.responseText;
+        }
+      };
+      xhttp.open("GET", "http://localhost/ws_assignment/requester/getProductlist.php","true");
+      xhttp.send();
+    }
+
+    function searchFunc(){
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 0; i< tr.length; i++){
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td){
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1){
+            tr[i].style.display = "";
+          }else{
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+</html>
